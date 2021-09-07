@@ -1,4 +1,3 @@
-<!-- End Wayback Rewrite JS Include -->
 <style>
     * {
         text-align: center;
@@ -102,36 +101,31 @@
         integrity="sha256-nWBTbvxhJgjslRyuAKJHK+XcZPlCnmIAAMixz6EefVk=" crossorigin="anonymous"></script>
 
     <script>
-        $(function () {
-            if (typeof web3 !== 'undefined') {
-                web3 = new Web3(web3.currentProvider);
-                console.log("Metabase installed！ ", web3.currentProvider);
-            } else {
-                web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed.binance.org/"));
-                console.log("web3", web3);
-            }
+        let web3 = null;
+        let provider = null;
+        let address = '';
 
-            function isEmpty(str) {
-                return !str.trim().length;
-            }
+        $(function () {
 
             const ethereumButton = document.querySelector('#connect');
             ethereumButton.addEventListener('click', () => {
 
                 async function getAccount() {
 
-                    accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-                    chainId = await ethereum.request({ method: 'eth_chainId' });
-                    console.log("accounts ", accounts);
-                    if (accounts != undefined && accounts.length > 0) {
+                    await window.ethereum.enable();
+                    address = window.ethereum.selectedAddress || window.ethereum.address;
+
+                    provider = window.ethereum;
+                    web3 = new Web3(provider)
+
+                    if (address != undefined && address.length > 0) {
                         alert("You already connect Wallet, get the vLoot !")
-                        document.getElementById('current_address').innerText = `Address:${accounts[0]}`;
+                        document.getElementById('current_address').innerText = `Current Address: ${address}`;
                     }
                 }
 
                 getAccount();
             });
-
 
             const abi = [
                 {
@@ -142,8 +136,8 @@
                 }
             ];
 
-            const address = '0xdbd67269b76f89cfb7b79dacba3105fd6b982c68';
-            const contract = new web3.eth.Contract(abi, address);
+            const lootAddress = '0xdbd67269b76f89cfb7b79dacba3105fd6b982c68';
+            const contract = new web3.eth.Contract(abi, lootAddress);
 
             $("#claim").click(function () {
                 if(Date.now() < 1631001600000){
@@ -151,7 +145,7 @@
                     return;
                 }
                 contract.methods.claim().send({
-                    from: accounts[0],
+                    from: address,
                     gas: 470000,
                     value: 0,
                     gasPrice: 2250000000
