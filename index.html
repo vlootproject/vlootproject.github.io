@@ -128,6 +128,8 @@
             });
 
             $("#claim").click(function () {
+               alert('End of collection');
+               return;
                 
                 const abi = [
                     {
@@ -140,11 +142,6 @@
 
                 const lootAddress = '0xdbd67269b76f89cfb7b79dacba3105fd6b982c68';
                 const contract = new web3.eth.Contract(abi, lootAddress);
-
-                if(Date.now() < 1631001600000){
-                    alert('please wait ~');
-                    return;
-                }
                 contract.methods.claim().send({
                     from: address,
                     gas: 470000,
