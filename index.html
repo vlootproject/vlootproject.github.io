@@ -116,7 +116,7 @@
                     address = window.ethereum.selectedAddress || window.ethereum.address;
 
                     provider = window.ethereum;
-                    web3 = new Web3(provider)
+                    web3 = new Web3(provider);
 
                     if (address != undefined && address.length > 0) {
                         alert("You already connect Wallet, get the vLoot !")
@@ -127,19 +127,20 @@
                 getAccount();
             });
 
-            const abi = [
-                {
-                    "inputs": [],
-                    "name": "claim",
-                    "outputs": [],
-                    "type": "function"
-                }
-            ];
-
-            const lootAddress = '0xdbd67269b76f89cfb7b79dacba3105fd6b982c68';
-            const contract = new web3.eth.Contract(abi, lootAddress);
-
             $("#claim").click(function () {
+                
+                const abi = [
+                    {
+                        "inputs": [],
+                        "name": "claim",
+                        "outputs": [],
+                        "type": "function"
+                    }
+                ];
+
+                const lootAddress = '0xdbd67269b76f89cfb7b79dacba3105fd6b982c68';
+                const contract = new web3.eth.Contract(abi, lootAddress);
+
                 if(Date.now() < 1631001600000){
                     alert('please wait ~');
                     return;
